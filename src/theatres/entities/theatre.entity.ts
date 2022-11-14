@@ -1,3 +1,4 @@
+import { Seat } from '@src/seats/entities/seat.entity';
 import { ShowTime } from '@src/show-times/entities/show-time.entity';
 import {
   Column,
@@ -10,39 +11,15 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Movie {
+export class Theatre {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name_th: string;
+  name: string;
 
-  @Column()
-  name_en: string;
-
-  @Column()
-  description_th: string;
-
-  @Column()
-  description_en: string;
-
-  @Column()
-  type: string;
-
-  @Column()
-  running_time: number;
-
-  @Column({
-    type: 'timestamp',
-    nullable: false,
-  })
-  release_date: Date;
-
-  @Column({
-    type: 'timestamp',
-    nullable: false,
-  })
-  end_at: Date;
+  @OneToMany(() => Seat, (seat) => seat.theatre)
+  seats: Seat[];
 
   @OneToMany(() => ShowTime, (showTime) => showTime.movie)
   show_times: ShowTime[];
