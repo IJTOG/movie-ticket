@@ -5,6 +5,7 @@ import { define, factory } from 'typeorm-seeding';
 define(Seat, () => {
   const record = new Seat();
   record.name = 'A' + faker.random.numeric(2);
+  record.price = Number(faker.random.numeric(3));
 
   return record;
 });
