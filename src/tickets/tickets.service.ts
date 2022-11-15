@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seat } from '@src/seats/entities/seat.entity';
 import { ShowTime } from '@src/show-times/entities/show-time.entity';
@@ -22,34 +26,60 @@ export class TicketsService {
   ) {}
 
   async create(createTicketDto: CreateTicketDto) {
-    const seat = await this.seatRepository.findOne({
-      where: { id: createTicketDto.seat_id },
-    });
+    const queryRunner =
+      this.ticketRepository.manager.connection.createQueryRunner();
 
-    const theatre = await this.theatreRepository.findOne({
-      where: { id: seat.theatre_id },
-    });
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const showtime = await this.showtimeRepository.findOne({
-      where: { id: createTicketDto.show_time_id },
-    });
+    try {
+      const tickets: Ticket[] = [];
+      for (const reqSeat of createTicketDto.seats) {
+        const seat = await this.seatRepository.findOne({
+          where: { id: reqSeat.seat_id },
+        });
 
-    if (showtime.theatre_id !== theatre.id) {
-      throw new BadRequestException();
+        const theatre = await this.theatreRepository.findOne({
+          where: { id: seat.theatre_id },
+        });
+
+        const showtime = await this.showtimeRepository.findOne({
+          where: { id: createTicketDto.show_time_id },
+        });
+
+        if (showtime.theatre_id !== theatre.id) {
+          throw new BadRequestException();
+        }
+        const ticket = await queryRunner.manager.findOne(Ticket, {
+          where: {
+            seat_id: reqSeat.seat_id,
+            show_time_id: createTicketDto.show_time_id,
+          },
+        });
+        if (ticket) {
+          throw new BadRequestException();
+        }
+
+        const plainTicket = new Ticket();
+        plainTicket.seat_id = reqSeat.seat_id;
+        plainTicket.show_time_id = createTicketDto.show_time_id;
+
+        tickets.push(plainTicket);
+      }
+
+      await queryRunner.manager.save(tickets);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      /* istanbul ignore next */
+      await queryRunner.rollbackTransaction();
+
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
 
-    const ticket = await this.ticketRepository.findOne({
-      where: {
-        seat_id: createTicketDto.seat_id,
-        show_time_id: createTicketDto.show_time_id,
-      },
-    });
-
-    if (ticket) {
-      throw new BadRequestException();
-    }
-
-    return this.ticketRepository.save({ ...createTicketDto });
+    return { success: true };
   }
 
   async findAll({ page, size }: GetTicketsDto) {
@@ -74,6 +104,9 @@ export class TicketsService {
 
   async cancel(id: string) {
     const record = await this.findOne(id);
+    if (!record) {
+      throw new NotFoundException();
+    }
     return this.ticketRepository.remove(record);
   }
 }
