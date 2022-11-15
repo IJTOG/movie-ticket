@@ -32,11 +32,11 @@ export class TheatresController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.theatresService.findOne(+id);
+    return this.theatresService.findOne(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.theatresService.remove(+id);
+    return this.theatresService.remove(id);
   }
 }

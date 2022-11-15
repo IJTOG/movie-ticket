@@ -32,11 +32,12 @@ export class SeatsService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} seat`;
+  findOne(id: string) {
+    return this.seatRepository.findOne({ where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} seat`;
+  async remove(id: string) {
+    const record = await this.findOne(id);
+    return this.seatRepository.softRemove(record);
   }
 }

@@ -5,5 +5,8 @@ export class CreateSeatDto {
   name: string;
 
   @ApiProperty()
+  price: number;
+
+  @ApiProperty()
   theatre_id: string;
 }

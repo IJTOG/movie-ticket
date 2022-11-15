@@ -32,11 +32,12 @@ export class TheatresService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} theatre`;
+  findOne(id: string) {
+    return this.theatreRepository.findOne({ where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} theatre`;
+  async remove(id: string) {
+    const record = await this.findOne(id);
+    return this.theatreRepository.softRemove(record);
   }
 }

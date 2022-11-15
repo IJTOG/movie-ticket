@@ -21,6 +21,9 @@ export class Seat {
   name: string;
 
   @Column()
+  price: number;
+
+  @Column()
   theatre_id: string;
 
   @ManyToOne(() => Theatre, (theatre) => theatre.seats)

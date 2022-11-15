@@ -32,11 +32,11 @@ export class SeatsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.seatsService.findOne(+id);
+    return this.seatsService.findOne(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.seatsService.remove(+id);
+    return this.seatsService.remove(id);
   }
 }

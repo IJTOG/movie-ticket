@@ -19,19 +19,19 @@ export default class MainSeeder implements Seeder {
       const st1 = await factory(ShowTime)().create({
         movie_id: movie.id,
         theatre_id: theatres[0].id,
-        time: new Date(dateCopy.setHours(13, 0, 0, 0)),
+        time: new Date(dateCopy.setHours(0, 0, 0, 0)),
       });
 
       const st2 = await factory(ShowTime)().create({
         movie_id: movie.id,
         theatre_id: theatres[0].id,
-        time: new Date(dateCopy.setHours(15, 0, 0, 0)),
+        time: new Date(dateCopy.setHours(11, 0, 0, 0)),
       });
 
       const st3 = await factory(ShowTime)().create({
         movie_id: movie.id,
         theatre_id: theatres[1].id,
-        time: new Date(dateCopy.setHours(17, 30, 0, 0)),
+        time: new Date(dateCopy.setHours(13, 30, 0, 0)),
       });
 
       stl.push(...[st1, st2, st3]);

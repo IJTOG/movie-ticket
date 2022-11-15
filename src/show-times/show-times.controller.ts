@@ -42,6 +42,6 @@ export class ShowTimesController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.showTimesService.remove(+id);
+    return this.showTimesService.remove(id);
   }
 }
