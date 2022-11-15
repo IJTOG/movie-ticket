@@ -16,12 +16,8 @@ export class TicketsService {
     return this.ticketRepository.save({ ...createTicketDto });
   }
 
-  async findAll({ page, size, released }: GetTicketsDto) {
+  async findAll({ page, size }: GetTicketsDto) {
     const query = this.ticketRepository.createQueryBuilder('movie');
-
-    if (released) {
-      query.andWhere('release_date <= NOW()');
-    }
 
     const [results, total_count] = await query
       .skip((page - 1) * size)

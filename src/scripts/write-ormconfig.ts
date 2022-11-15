@@ -23,6 +23,8 @@ async function bootstrap() {
     path.join(__dirname, '../db/migrations/**/*{.js,.ts}'),
   ];
   ormconfig['cli'] = { migrationsDir: 'migrations' };
+  ormconfig['seeds'] = [path.join(__dirname, '../db/seeds/*{.js,.ts}')];
+  ormconfig['factories'] = [path.join(__dirname, '../db/factories/*{.js,.ts}')];
   ormconfig['synchronize'] = undefined;
 
   fs.writeFileSync('ormconfig.json', JSON.stringify(ormconfig, null, 2));
