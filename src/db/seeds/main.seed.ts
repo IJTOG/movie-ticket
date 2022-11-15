@@ -46,7 +46,7 @@ export default class MainSeeder implements Seeder {
     }
 
     for (const round of [...Array(4).keys()]) {
-      await factory(Ticket)().createMany(2, {
+      await factory(Ticket)().create({
         show_time_id: stl[round].id,
         seat_id: seats[round].id,
       });

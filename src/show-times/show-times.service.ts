@@ -45,7 +45,11 @@ export class ShowTimesService {
       .where({ id })
       .innerJoinAndSelect('show_time.theatre', 'theatre')
       .innerJoinAndSelect('theatre.seats', 'seat')
-      .leftJoinAndSelect('seat.tickets', 'ticket');
+      .leftJoinAndSelect(
+        'seat.tickets',
+        `ticket`,
+        `ticket.show_time_id = '${id}'`,
+      );
 
     const results = await query.getMany();
     return { results };
