@@ -1,6 +1,6 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a example project, movie ticket service.
 
 ## Installation
 
@@ -8,32 +8,30 @@
 $ npm install
 ```
 
-## Run database migration
-
-```bash
-$ npm run typeorm migration:run
-```
-
 ## Running the app
 
-# run start db, seeding, development
-
 ```bash
-# to run all script below at once, run this script.
+# to run all script below at once, run this script for macos.
 $ zsh run.zsh
 
 # start database
 $ docker-compose up -d
 
-# seed data
+# Run database migration
+$ npm run typeorm migration:run
+
+# seed data to database
 $ npm run db:seed
 
 # development watch mode
 $ npm run dev
-
 # or production mode
 $ npm run start:prod
 ```
+
+## API documentation
+
+go to http://localhost:3000/swagger
 
 ## Test
 
@@ -48,6 +46,6 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## To run generate migration
+## Run generate migration
 
 $ npm run typeorm migration:generate .\src\db\migrations\{NAME}
